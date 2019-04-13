@@ -6,8 +6,8 @@
 #include <conio.h>
 #include <Windows.h>
 
-const int mapheight = 25;
-const int mapwidth  = 25;
+const int mapheight = 15;
+const int mapwidth  = 15;
 
 const int mapsize = mapheight * mapwidth;
 
@@ -73,7 +73,7 @@ void processMove(Move m) {
 	int newx = dx + head_x;
 	int newy = dy + head_y;
 
-	int current = newy*mapheight + newx;
+	int current = newy*mapwidth + newx;
 	if (map[current] == -2) { // food
 		food++;
 		generateFood();
@@ -95,7 +95,6 @@ void start() {
 	move = right;
 	for (int i = 0; i < mapsize; i++)
 		map[i] = 0;
-
 	for (int i = 0; i < mapheight; i++) {
 		map[i*mapwidth] = -1;
 		map[(i + 1)*mapwidth - 1] = -1;
@@ -109,12 +108,16 @@ void start() {
 void printMap() {
 	for (int i = 0; i < mapheight; i++) {
 		for (int j = 0; j < mapwidth; j++) {
-			int current = map[i*mapheight + j];
+			int current = map[i*mapwidth + j];
 			if (current == 0)
 				std::cout << '_';
+			else if (current == -1)
+				std::cout << 'X';
+			else if (current > 0)
+				std::cout << 'o';
 			else
-				std::cout << 'O';
-			std::cout << ' ';
+				std::cout << 'F';
+			std::cout << " ";
 		}
 		std::cout << '\n';
 	}
@@ -122,8 +125,8 @@ void printMap() {
 void updateMap() {
 	for (int i = 1; i < mapheight - 1; i++)
 		for (int j = 1; j < mapwidth - 1; j++)
-			if (map[i*mapheight+j]>0)
-				map[i*mapheight + j]--;
+			if (map[i*mapwidth + j]>0)
+				map[i*mapwidth + j]--;
 }
 
 
@@ -133,6 +136,7 @@ void set_console_color() { // default color
 void set_console_color(int color) {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
+
 
 int main()
 {
@@ -150,7 +154,15 @@ int main()
 		printMap();
 		Sleep(500/food);
 	}
-	std::cout << "Game over. Your score is: " << food;
+	std::cout << "Game over. Your score is: " << food << '\n';
+	char c;
+	while (true) {
+		c = _getch();
+		if (c == 'r') {
+			food = 3;
+			main();
+		}
+	}
 	std::cin.ignore();
 }
 
@@ -170,18 +182,3 @@ int main()
 
 
 
-Move getMove() {
-	if (GetKeyState(VK_UP)) {
-		return up;
-	}
-	else if (GetKeyState(VK_RIGHT)) {
-		return right;
-	}
-	else if (GetKeyState(VK_DOWN)) {
-		return down;
-	}
-	else if (GetKeyState(VK_LEFT)) {
-		return left;
-	}
-	return no_move;
-}

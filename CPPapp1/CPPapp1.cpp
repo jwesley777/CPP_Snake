@@ -9,15 +9,60 @@
 const int mapheight = 15;
 const int mapwidth  = 15;
 
-const int mapsize = mapheight * mapwidth;
+class Map {
+	private:
+		int height;
+		int width;
+		int mapSize;
+		int map[160000];
+		int food = 3;
+	public:
+		void setHeight(int h) {
+			height = h;
+		}
+		int getHeight() {
+			return height;
+		}
 
-int map[mapsize];
+		void setWidth(int w) {
+			width = w;
+		}
+		int getWidth() {
+			return width;
+		}
+};
 
 enum Move { up , right, down, left, no_move };
-Move move = up;
-int head_x;
-int head_y;
-int food = 3;
+
+class Snake {
+	private:
+		int headX;
+		int headY;
+		Move move = up;
+	public:
+		void setHeadX(int x) {
+			headX = x;
+		}
+		int getHeadX() {
+			return headX;
+		}
+
+		void setHeadY(int y) {
+			headY = y;
+		}
+		int getHeadY() {
+			return headY;
+		}
+
+		void setMove(Move m) {
+			move = m;
+		}
+		Move getMove() {
+			return move;
+		}
+};
+
+
 bool running;
 
 
